@@ -114,8 +114,9 @@ The test suite covers the following scenarios:
 Enter your Date of Birth (DD/MM/YYYY): 15/08/1998
 
 Your age is 27 years, 6 months, and 15 days.
-Total age: 330 months and 10088 days.
-Days until next birthday: 148 days.
+Total age in months: 330 months
+Total age in days: 10088 days
+Days until next birthday: 148 days
 ```
 
 ### Leap Year Birthday
@@ -124,8 +125,9 @@ Days until next birthday: 148 days.
 Enter your Date of Birth (DD/MM/YYYY): 29/02/2000
 
 Your age is 26 years, 0 months, and 19 days.
-Total age: 312 months and 9517 days.
-Days until next birthday: 346 days.
+Total age in months: 312 months
+Total age in days: 9517 days
+Days until next birthday: 346 days
 ```
 
 ### Invalid Date Error
@@ -133,7 +135,7 @@ Days until next birthday: 346 days.
 ```
 Enter your Date of Birth (DD/MM/YYYY): 31/02/2020
 
-Invalid date. Please enter a valid date in DD/MM/YYYY format.
+Error: Invalid date. Please enter a valid date in DD/MM/YYYY format.
 ```
 
 ### Future Date Error
@@ -141,7 +143,7 @@ Invalid date. Please enter a valid date in DD/MM/YYYY format.
 ```
 Enter your Date of Birth (DD/MM/YYYY): 25/12/2030
 
-Date of Birth cannot be a future date.
+Error: Date of Birth cannot be a future date.
 ```
 
 ### Wrong Format Error
@@ -149,7 +151,7 @@ Date of Birth cannot be a future date.
 ```
 Enter your Date of Birth (DD/MM/YYYY): 1998-08-15
 
-Invalid format. Please enter the date in DD/MM/YYYY format (e.g., 15/08/1998).
+Error: Invalid format. Please enter the date in DD/MM/YYYY format (e.g., 15/08/1998).
 ```
 
 ## Technologies Used
