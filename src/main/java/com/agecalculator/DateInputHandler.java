@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * Handles reading and parsing Date of Birth input from the console.
@@ -59,6 +60,29 @@ public class DateInputHandler {
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("dd/MM/uuuu")
                     .withResolverStyle(ResolverStyle.STRICT);
+
+    /**
+     * Regular expression pattern that matches the basic {@code DD/MM/YYYY} structural format.
+     *
+     * <p>This pattern validates only the structural shape (two digits, slash, two digits,
+     * slash, four digits) without checking calendar validity. It is used to distinguish
+     * between two distinct error scenarios:</p>
+     * <ul>
+     *   <li><strong>Format error</strong> — input does not match {@code DD/MM/YYYY} structure
+     *       (e.g., {@code "1998-08-15"}, {@code "abc"})</li>
+     *   <li><strong>Invalid calendar date</strong> — input matches the format but represents
+     *       an impossible date (e.g., {@code "31/02/2020"}, {@code "30/02/2021"})</li>
+     * </ul>
+     */
+    private static final Pattern FORMAT_PATTERN = Pattern.compile("\\d{2}/\\d{2}/\\d{4}");
+
+    /** Error message for invalid calendar dates that match the DD/MM/YYYY format structure. */
+    private static final String INVALID_DATE_MESSAGE =
+            "Invalid date. Please enter a valid date in DD/MM/YYYY format.";
+
+    /** Error message for input strings that do not match the DD/MM/YYYY format structure. */
+    private static final String INVALID_FORMAT_MESSAGE =
+            "Invalid format. Please enter the date in DD/MM/YYYY format (e.g., 15/08/1998).";
 
     /**
      * Scanner instance for reading user input from the console.
@@ -142,8 +166,14 @@ public class DateInputHandler {
         try {
             parsedDate = LocalDate.parse(input, FORMATTER);
         } catch (DateTimeParseException e) {
+            // Differentiate between format errors and invalid calendar dates:
+            // If the input matches the DD/MM/YYYY structural pattern but still fails to parse,
+            // it is an invalid calendar date (e.g., 31/02/2020). Otherwise, it is a format error.
+            String errorMessage = FORMAT_PATTERN.matcher(input).matches()
+                    ? INVALID_DATE_MESSAGE
+                    : INVALID_FORMAT_MESSAGE;
             throw new DateTimeParseException(
-                    "Invalid format. Please enter the date in DD/MM/YYYY format (e.g., 15/08/1998).",
+                    errorMessage,
                     e.getParsedString(),
                     e.getErrorIndex(),
                     e
@@ -197,7 +227,7 @@ public class DateInputHandler {
     public static LocalDate parseDate(String dateString) {
         if (dateString == null) {
             throw new DateTimeParseException(
-                    "Invalid format. Please enter the date in DD/MM/YYYY format (e.g., 15/08/1998).",
+                    INVALID_FORMAT_MESSAGE,
                     "",
                     0
             );
@@ -209,8 +239,15 @@ public class DateInputHandler {
         try {
             parsedDate = LocalDate.parse(trimmed, FORMATTER);
         } catch (DateTimeParseException e) {
+            // Differentiate between format errors and invalid calendar dates:
+            // If the trimmed input matches the DD/MM/YYYY structural pattern but still fails
+            // to parse, it is an invalid calendar date (e.g., 31/02/2020). Otherwise, it is
+            // a format error (e.g., "1998-08-15", "abc", empty string).
+            String errorMessage = FORMAT_PATTERN.matcher(trimmed).matches()
+                    ? INVALID_DATE_MESSAGE
+                    : INVALID_FORMAT_MESSAGE;
             throw new DateTimeParseException(
-                    "Invalid format. Please enter the date in DD/MM/YYYY format (e.g., 15/08/1998).",
+                    errorMessage,
                     e.getParsedString(),
                     e.getErrorIndex(),
                     e
