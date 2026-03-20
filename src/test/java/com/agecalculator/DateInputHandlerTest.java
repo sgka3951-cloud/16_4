@@ -281,7 +281,7 @@ public class DateInputHandlerTest {
      * message rather than allowing a raw {@link NullPointerException} to propagate.
      */
     @Test
-    @DisplayName("Null input throws NullPointerException")
+    @DisplayName("Null input throws DateTimeParseException")
     void testNullInputThrowsException() {
         assertThrows(
                 DateTimeParseException.class,
