@@ -7,6 +7,9 @@ target/
 .classpath
 .project
 .settings/
+*.swp
+*.swo
+.vscode/
 
 # OS artifacts
 .DS_Store
